@@ -30,7 +30,7 @@ def main():
     
     if any(x.startswith('--c1') for x in args):
         # diffxls a.xls 1 --c1=A:D --c2=E:H
-        xls, n = args[1], int(args[2])
+        xls, n = Path(args[1]), int(args[2])
         opts = sorted(x for x in args if x.startswith('--c'))
         c1, c2 = opts[0].split('=')[-1], opts[1].split('=')[-1]
         if c2.endswith(":"):
@@ -41,26 +41,26 @@ def main():
             c2 += e2_alpha
         fp1 = to_csv(xls, sheet_name=n - 1, usecols=c1)
         fp2 = to_csv(xls, sheet_name=n - 1, usecols=c2)
-        fin_id = f"{xls}_{n}_{c1.replace(':', '2')}-{c2.replace(':', '2')}"
+        fin_id = f"{xls.stem}_{n}_{c1.replace(':', '2')}-{c2.replace(':', '2')}"
     elif len(args) == 3:
         # Use case: diffsheet <file1.xls> <file2.xls>
-        xls1, xls2 = args[1], args[2]
+        xls1, xls2 = Path(args[1]), Path(args[2])
         fp1 = to_csv(xls1, 0)
         fp2 = to_csv(xls2, 0)
-        fin_id = f"{xls1}-{xls2}"
+        fin_id = f"{xls1.stem}-{xls2.stem}"
     elif len(args) == 4:
         # Use case: diffsheet <file.xls> <num1> <num2>
-        xls, n1, n2 = args[1], int(args[2]), int(args[3])
+        xls, n1, n2 = Path(args[1]), int(args[2]), int(args[3])
         fp1 = to_csv(xls, n1 - 1)
         fp2 = to_csv(xls, n2 - 1)
-        fin_id = f"{xls}_{n1}-{n2}"
+        fin_id = f"{xls.stem}_{n1}-{n2}"
     elif len(args) == 5:
         # Use case: diffsheet <file1.xls> <num1> <file2.xls> <num2>
-        xls1, xls2 = args[1], args[3]
+        xls1, xls2 = Path(args[1]), Path(args[3])
         n1, n2 = int(args[2]), int(args[4])
         fp1 = to_csv(xls1, n1 - 1)
         fp2 = to_csv(xls2, n2 - 1)
-        fin_id = f"{xls1}_{n1}-{xls2}_{n2}"
+        fin_id = f"{xls1.stem}_{n1}-{xls2.stem}_{n2}"
     else:
         return
     
@@ -78,9 +78,9 @@ def to_csv(fin, sheet_name=0, usecols=None):
     global CALLED
     CALLED += 1
 
-    tmpf = (Path("~") / f"diffxls.py_{fin}_{sheet_name}_{CALLED}.csv").expanduser().as_posix()
+    tmpf = (Path("~") / f"diffxls.py_{fin.stem}_{sheet_name}_{CALLED}.csv").expanduser().as_posix()
     
-    if fin.endswith(".xlsx") or fin.endswith(".xls"):
+    if fin.suffix == ".xlsx" or fin.suffix == ".xls":
         pd.read_excel(fin, sheet_name=sheet_name, usecols=usecols).to_csv(tmpf)
     else: 
         #fin.lower().endswith(".tsv") or fin.lower().endswith(".csv"):
@@ -89,7 +89,10 @@ def to_csv(fin, sheet_name=0, usecols=None):
     
     return tmpf
 
-
+#%%
+from pathlib import Path
+s = Path("a.x")
+#%%
 
 def alpha2num(s):
     """ Convert base26 column string to number. """
