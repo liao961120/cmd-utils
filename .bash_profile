@@ -70,11 +70,11 @@ diffcsv() {
     daff --www --index "$1" "$2"
 }
 
-diffxls() {
-    # Usage: diffxls <file1> <file2>  (supports: .xls .xlsx csv/tsv)
-    #        diffxls <file.xls> <num1> <num2>
-    #        diffxls <file1.xls> <num1> <file2.xls> <num2>
-    python /c/Users/rd/bin/diffxls.py "$1" "$2" "$3" "$4"
+diffxl() {
+    # Usage: diffxl <file1> <file2>  (supports: .xls .xlsx csv/tsv)
+    #        diffxl <file.xls> <num1> <num2>
+    #        diffxl <file1.xls> <num1> <file2.xls> <num2>
+    python /c/Users/rd/bin/diffxl.py "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8"
 }
 # diffxls() {
 #     # Usage: diffxls <file1.xls> <file2.xls2>
