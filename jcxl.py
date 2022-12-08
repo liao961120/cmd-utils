@@ -5,17 +5,17 @@ import pandas as pd
 from pathlib import Path
 
 DOC = '''
-jqls converts ASCII tables to Excel (or CSV).
+jcxl converts ASCII tables to Excel (or CSV).
 Call as:
-  jqxl a.txt -o a.xlsx
-  jqxl a.txt -o a.csv
-  jqxl a.txt b.txt -o merged.xlsx
+  jcxl a.txt -o a.xlsx
+  jcxl a.txt -o a.csv
+  jcxl a.txt b.txt -o merged.xlsx
 '''
 
 def main():
     if print_help(sys.argv) == 1: return
     
-    outfp = "jqxl.out.xlsx"
+    outfp = "jcxl.out.xlsx"
     args = [ '-o' if x == '--output' else x for x in sys.argv[1:] ]
     if '-o' in args:
         outfp = args.index("-o") + 1

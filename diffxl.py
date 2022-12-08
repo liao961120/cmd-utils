@@ -7,7 +7,7 @@ import pandas as pd
 from pathlib import Path
 
 DOC = '''
-diffxls can produce and apply tabular diffs.
+diffxl can produce and apply tabular diffs.
 Call as:
   diffxl a.csv b.csv
   diffxl a.tsv b.tsv --output       (write HTML output to current dir)

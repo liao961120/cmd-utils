@@ -22,11 +22,11 @@ body() {
     sed -n "${2-1},${3-\$}p" "${1}"
 }
 
-jqxl() {
-    # jqxl a.txt -o a.xlsx
-    # jqxl a.txt -o a.csv
-    # jqxl a.txt b.txt -o merged.xlsx
-    python /c/Users/rd/bin/jqxl.py "$@"
+jcxl() {
+    # jcxl a.txt -o a.xlsx
+    # jcxl a.txt -o a.csv
+    # jcxl a.txt b.txt -o merged.xlsx
+    python /c/Users/rd/bin/jcxl.py "$@"
 }
 
 xl2csv() {
