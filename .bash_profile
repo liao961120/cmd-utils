@@ -14,51 +14,29 @@ export PATH=$PATH:/c/Users/rd/py3.11/Scripts
     rm tmp.txt tmp.utf8.txt
 }
 
+body() {
+    # body <file.txt> <#from> <#to> 
+    # body a.txt 1 10  (print the first 10 lines)
+    # body a.txt 3 10  (print L3~L10)
+    # body a.txt 3     (print L1 to the last line)
+    sed -n "${2-1},${3-\$}p" "${1}"
+}
+
+jqxl() {
+    # jqxl a.txt -o a.xlsx
+    # jqxl a.txt -o a.csv
+    # jqxl a.txt b.txt -o merged.xlsx
+    python /c/Users/rd/bin/jqxl.py "$@"
+}
 
 xl2csv() {
-    # Usage xl2csv <input.xls(x)> <optional-sheet-index>
-    in2csv.exe -I --write-sheets - "${1}"
-    # Optional sheet index
-    if [[ $2 != "" ]]; then
-        num=$(($2 - 1))
-    else
-        num=-1
-    fi
-    
-    printf "\n\n"
-
-    bn=$(basename -s .xlsx "$1")
-    bn=$(basename -s .xls "$1")
-    tmp=$HOME/tmp.csv
-    touch $tmp
-    for file in "$bn"_*.csv; do
-        [ -e "$file" ] || continue  # deal with non-matching
-        
-        # Skip when sheet num not matching current file
-        if [[ $2 != "" ]]; then
-            echo "${bn}_${num}".csv
-            [[ $file != "${bn}_${num}".csv ]] && continue
-        fi
-
-        cat "$file" | 2utf > $tmp
-        cat $tmp > "$file"
-        echo "Output: \`$file\`"
-    done
-    rm $tmp
-
-    echo "$file"
+    # xl2csv <a.xlsx>        (Convert the 1st sheet of a.xlsx to a csv file)
+    # xl2csv <a.xlsx> 2      (Convert the 2nd sheet of a.xlsx to a csv file)
+    # xl2csv <a.xlsx> 1,3    (Convert the 1st & 3rd sheet of a.xlsx to csv files)
+    # xl2csv <a.xlsx> all    (Convert each sheet of a.xlsx to a csv file)
+    # xl2csv <a.csv>         (Recode cp950 to utf8)
+    python /c/Users/rd/bin/xl2csv.py "$1" "$2" "$3"
 }
-
-xl2csv1() {
-    # Usage: xl2csv1 <file.xls>
-    tmp=$(echo $HOME/tmp.txt)
-    # Single sheet version
-    in2csv.exe -I "${1}" > "$tmp"
-    cat "$tmp" | 2utf > "$1.csv"
-    rm "$tmp"
-    echo "$1.csv"
-}
-
 
 difff() {
     python /c/Users/rd/bin/diff.py "$1" "$2" "$3"
@@ -76,13 +54,6 @@ diffxl() {
     #        diffxl <file1.xls> <num1> <file2.xls> <num2>
     python /c/Users/rd/bin/diffxl.py "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8"
 }
-# diffxls() {
-#     # Usage: diffxls <file1.xls> <file2.xls2>
-#     f1=$(xl2csv1 "$1")
-#     f2=$(xl2csv1 "$2")
-#     diffcsv "$f1" "$f2"
-# }
-
 
 # Compare two csv (output html in web browser)
 # daff --output OUT.html --index --www foo2.csv foo3.csv
