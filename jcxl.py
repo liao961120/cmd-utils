@@ -6,10 +6,17 @@ from pathlib import Path
 
 DOC = '''
 jcxl converts ASCII tables to Excel (or CSV).
+
 Call as:
   jcxl a.txt -o a.xlsx
   jcxl a.txt -o a.csv
   jcxl a.txt b.txt -o merged.xlsx
+
+Note:
+  jcxl expects input text files with a native encoding (i.e. Big5/cp950 on most
+  Windows machines in Taiwan). Output CSV files would be UTF-8 encoded. The 
+  header row in the input text files must be ASCII characters, else they would 
+  be replaced with empty string.
 '''
 
 def main():
@@ -28,7 +35,7 @@ def main():
         return
 
     if len(fps) == 1:
-        fp = fps[1]
+        fp = fps[0]
         result = jc.parse("asciitable", read_file(fp))
         d = pd.DataFrame(result)
         if outtype == '.csv':
