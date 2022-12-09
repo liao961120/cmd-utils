@@ -1,5 +1,6 @@
 BATCH_DIR=/c/Users/rd/AppData/Local/Microsoft/WindowsApps
 SRC_DIR='C:\Users\rd\bin\dist'
+NATIVE_ENC=cp950
 
 # Print Doc
 if [[ $1 = "" ]]; then
@@ -18,7 +19,7 @@ pyinstaller "${fp}.py"
 echo "@ECHO OFF
 ${SRC_DIR}\\${fp}\\${fp}.exe %*
 " > tmp.bat
-iconv -f UTF-8 -t cp950 tmp.bat > batch/"${fp}.bat"
+iconv -f UTF-8 -t $NATIVE_ENC tmp.bat > batch/"${fp}.bat"
 unix2dos.exe batch/"${fp}.bat"
 
 # Copy .bat to directory on PATH
