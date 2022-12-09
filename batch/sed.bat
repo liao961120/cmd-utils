@@ -1,3 +1,3 @@
 @ECHO OFF
-C:\Users\rd\bin\dist\jcxl\jcxl.exe %*
+C:\Users\rd\bin\unix\sed\bin\sed.exe %*
 :: PAUSE
