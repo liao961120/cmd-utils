@@ -1,8 +1,8 @@
 #%%
-import jc
 import sys
-import pandas as pd
 from pathlib import Path
+from pandas import DataFrame, ExcelWriter
+from jc.parsers.asciitable import parse
 
 DOC = '''
 jcxl converts ASCII tables to Excel (or CSV).
@@ -36,8 +36,8 @@ def main():
 
     if len(fps) == 1:
         fp = fps[0]
-        result = jc.parse("asciitable", read_file(fp))
-        d = pd.DataFrame(result)
+        result = parse(read_file(fp))
+        d = DataFrame(result)
         if outtype == '.csv':
             d.to_csv(outfp, index=False, header=True)
         else:
@@ -45,15 +45,15 @@ def main():
     else:
         dfs = []
         for fp in fps:
-            result = jc.parse("asciitable", read_file(fp))
-            d = pd.DataFrame(result)
+            result = parse(read_file(fp))
+            d = DataFrame(result)
             dfs.append(d)
         if outtype == '.csv':
             print("Cannot create multiple sheets in .csv plaintext!")
             print("Use Excel (.xlsx) as output format!")
             print("Exiting...")
             return
-        with pd.ExcelWriter(outfp) as writer:
+        with ExcelWriter(outfp) as writer:
             for fp, df in zip(fps, dfs):
                 df.to_excel(writer, sheet_name=fp, index=False, header=True)
 

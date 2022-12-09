@@ -1,1 +1,6 @@
 *.exe
+*.spec
+hello*
+build
+dist
+unix
