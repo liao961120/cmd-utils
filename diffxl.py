@@ -1,9 +1,7 @@
-#%%
 import sys
 import shutil
 import subprocess
-import webbrowser
-import pandas as pd
+from pandas import read_excel
 from pathlib import Path
 
 DOC = '''
@@ -81,7 +79,7 @@ def to_csv(fin, sheet_name=0, usecols=None):
     tmpf = (Path("~") / f"diffxls.py_{fin.stem}_{sheet_name}_{CALLED}.csv").expanduser().as_posix()
     
     if fin.suffix == ".xlsx" or fin.suffix == ".xls":
-        pd.read_excel(fin, sheet_name=sheet_name, usecols=usecols).to_csv(tmpf)
+        read_excel(fin, sheet_name=sheet_name, usecols=usecols).to_csv(tmpf)
     else: 
         #fin.lower().endswith(".tsv") or fin.lower().endswith(".csv"):
         # pd.read_csv(fin).to_csv(tmpf)
@@ -118,7 +116,8 @@ def num2alpha_r(num, res = ""):
 #%%
 def open_in_browser(fp):
     fp = Path(fp).absolute().as_posix()
-    webbrowser.open(f"file:///{fp}")
+    # webbrowser.open(f"file:///{fp}")
+    subprocess.run(["explorer", f"file:///{fp}"])
 
 
 def print_help():

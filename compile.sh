@@ -28,4 +28,4 @@ cp batch/"${fp}.bat" "$BATCH_DIR"/"${fp}.bat"
 
 # Clean up
 rm tmp.bat "${fp}.spec"
-[[ -d build ]] && rm -r build
+# [[ -d build ]] && rm -r build
