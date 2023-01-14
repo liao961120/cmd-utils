@@ -59,6 +59,37 @@ jcxl --help
 #>   header row in the input text files must be ASCII characters, else they would 
 #>   be replaced with empty string.
 
+python tparse.py  # (Not compiled yet)
+#> tparse parses plaintext tables and exports them to csv/excel.
+#> 
+#>   Call as:
+#>   python tparse.py table.txt output.csv
+#>   python tparse.py table.txt output.xlsx
+#> 
+#>   In Python
+#>   from tparse import tparse
+#>   table = tparse("table.txt")  # tparse() returns a 2D list
+#> 
+#>   Note:
+#>   `tparse` scans through each line of the table to determine
+#>   the columns that are spanned with values. Hence, blank 
+#>   columns between values are required for successful parsing.
+#>   
+#>   A table that could be parsed by `tparse` is shown below.
+#>   Note that the character `|` are replaced with space during 
+#>   parsing, and "dashed" lines with `-` spanning the full 
+#>   table are ignored by `tparse`.
+#> 
+#>   |Score   Used   %    % |  Meas  Meas  MnSq | Residual |
+#>   -------------------------------------------------------
+#>   |  4       .5   2%   2%|  -.59  -1.28  1.2 |          |
+#>   |  6      3.5  14%  18%|  -.78   -.32  1.6 |      2.0 |
+#>   |  7      1.5   6%  24%|  -.74   -.75   .3 |          |
+#>   | 10      2.5  10%  48%|  -.05   -.14   .3 |       .6 |
+#>   | 11      1.0   4%  52%|   .00    .00   .6 |      -.9 |
+#>   | 18       .5   2% 100%|   .59*  1.28  1.2 |          |
+#>   -------------------------------------------------------
+
 diffxl --help
 #> diffxl can produce and apply tabular diffs.
 #> Call as:
