@@ -1,13 +1,15 @@
 import sys
 import shutil
 import subprocess
-from pandas import read_excel
 from pathlib import Path
+from pandas import read_excel, DataFrame
+from jc.parsers.asciitable import parse as jc_parse
 
 DOC = '''
 diffxl can produce and apply tabular diffs.
 Call as:
   diffxl a.csv b.csv
+  diffxl a.txt b.txt                (ascii table)
   diffxl a.tsv b.tsv --output       (write HTML output to current dir)
   diffxl a.xls b.xls                (1st sheet of a.xls vs. 1st sheet of b.xls)
   diffxl a.xls 1 b.xls 3            (1st sheet of a.xls vs. 3rd sheet of b.xls)
@@ -81,10 +83,14 @@ def to_csv(fin, sheet_name=0, usecols=None):
     if fin.suffix == ".xlsx" or fin.suffix == ".xls":
         read_excel(fin, sheet_name=sheet_name, usecols=usecols).to_csv(tmpf)
     else: 
-        #fin.lower().endswith(".tsv") or fin.lower().endswith(".csv"):
-        # pd.read_csv(fin).to_csv(tmpf)
-        shutil.copyfile(fin, tmpf)
-    
+        if fin.suffix == ".tsv" or fin.suffix == ".csv":
+            shutil.copyfile(fin, tmpf)
+        # Treat as ASCII table
+        else:
+            result = jc_parse(read_file(fin))
+            DataFrame(result).to_csv(tmpf, index=False, header=True)
+
+
     return tmpf
 
 #%%
@@ -123,6 +129,12 @@ def open_in_browser(fp):
 def print_help():
     global DOC
     print(DOC.strip())
+
+
+def read_file(fp):
+    with open(fp) as f:
+        return f.read()
+
 
 
 if __name__ == '__main__':
