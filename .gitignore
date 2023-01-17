@@ -4,3 +4,8 @@ hello*
 build
 dist
 unix
+make
+make.zip
+rtools*
+task
+Graphviz
