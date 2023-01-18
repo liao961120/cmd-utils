@@ -5,6 +5,34 @@ export PATH=$PATH:/c/Users/rd/AppData/Local/Programs/R/R-4.2.2/bin
 export PATH=$PATH:/c/Users/rd/py3.11/Scripts
 
 
+open() {
+    start "$@"
+}
+
+task() {
+    /c/Users/rd/bin/task/task.exe "$@"
+}
+
+bc() {
+    /c/Users/rd/bin/unix/bc/bin/bc.exe "$@"
+}
+
+zip() {
+    /c/Users/rd/bin/unix/zip/bin/zip.exe "$@"
+}
+
+make() {
+    /c/Users/rd/bin/make/bin/make.exe "$@"
+}
+
+rstudio() {
+    /c/Users/rd/Rstudio/rstudio2022.exe "$@" &
+}
+
+dot() {
+    /c/Users/rd/bin/Graphviz/dot.exe "$@"
+}
+
 2utf() {
     # Usage:  cat <file> | 2utf
     stdin=$(</dev/stdin)
@@ -29,13 +57,17 @@ jcxl() {
     python /c/Users/rd/bin/jcxl.py "$@"
 }
 
+xlmerge() {
+    python /c/Users/rd/bin/xlmerge.py "$@"
+}
+
 xl2csv() {
     # xl2csv <a.xlsx>        (Convert the 1st sheet of a.xlsx to a csv file)
     # xl2csv <a.xlsx> 2      (Convert the 2nd sheet of a.xlsx to a csv file)
     # xl2csv <a.xlsx> 1,3    (Convert the 1st & 3rd sheet of a.xlsx to csv files)
     # xl2csv <a.xlsx> all    (Convert each sheet of a.xlsx to a csv file)
     # xl2csv <a.csv>         (Recode cp950 to utf8)
-    python /c/Users/rd/bin/xl2csv.py "$1" "$2" "$3"
+    python /c/Users/rd/bin/xl2csv.py "$@"
 }
 
 difff() {
