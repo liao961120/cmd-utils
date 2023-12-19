@@ -1,31 +1,42 @@
 DOC = '''
-xlmerge merges multiple Excel/CSVs into a single workbook
+xlmerge merges multiple Excel/CSVs into a single Excel workbook
 
   Call as:
   python xlmerge.py a.xlsx b.xlsx -o merged.xlsx
   python xlmerge.py a.csv b.xlsx -o merged.xlsx
 '''
-
 import sys
 from pathlib import Path
 from pandas import read_csv, read_fwf, read_excel, ExcelWriter
 
+
 def main():
-    argv = sys.argv
-    out = Path("merged.xlsx")
-    if '-o' in argv:
-        idx = argv.index('-o') + 1
-        try:
-            out = Path(argv[idx])
-            argv = [ x for i, x in enumerate(argv) if i not in (idx, idx - 1) ]
-        except:
-            help()
-            return
-    if len(argv) < 2:
+    """Command line program"""
+    args = arg_parse(sys.argv)
+    if args == 1:
         help()
         return
-    
-    inputs = [ Path(x) for x in argv if not x.endswith(".py") ]
+    inputs, outfp = args['inputs'], args['outfp']
+    merged_tbl = xlmerge(inputs)
+    write_merged_excel(merged_tbl, outfp=outfp)
+    print(f"Output: {outfp}")
+
+
+def xlmerge(inputs):
+    """Merge multiple Excel/CSV tables into a dictionary of `pd.DataFrame`s.
+
+    Parameters
+    ----------
+    inputs : list
+        A list of `pathlib.Path` objects pointing to the file holding 
+        input tables (.xlsx/.csv/.tsv...).
+
+    Returns
+    -------
+    dict
+        A dictionary with pd.DataFrames as values and sheet or file names of
+        the input files as keys.
+    """
     merged_tbl_dict = {}
     for fp in inputs:
         tbls = read_tables(fp)
@@ -34,12 +45,24 @@ def main():
             while nm in merged_tbl_dict: 
                 nm = f"{nmo}_{i}"; i += 1
             merged_tbl_dict[nm] = tbl
-    write_merged_excel(merged_tbl_dict, outpf=out)
-    print(f"Output: {out}")
+    return merged_tbl_dict
 
 
-def write_merged_excel(merged_tbl_dict, outpf):
-    with ExcelWriter(outpf) as writer:  
+def arg_parse(argv):
+    out = Path("merged.xlsx")
+    if '-o' in argv:
+        idx = argv.index('-o') + 1
+        try:
+            out = Path(argv[idx])
+            argv = [ x for i, x in enumerate(argv) if i not in (idx, idx - 1) ]
+        except: return 1
+    if len(argv) < 2: return 1
+    inputs = [ Path(x) for x in argv if not x.endswith(".py") ]
+    return { 'outfp': out, 'inputs': inputs }
+
+
+def write_merged_excel(merged_tbl_dict, outfp):
+    with ExcelWriter(outfp) as writer:  
         for nm, df in merged_tbl_dict.items():
             df.to_excel(writer, sheet_name=nm, header=False, index=False)
 

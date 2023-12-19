@@ -3,7 +3,6 @@ import shutil
 import subprocess
 from pathlib import Path
 from pandas import read_excel, DataFrame
-from jc.parsers.asciitable import parse as jc_parse
 
 DOC = '''
 diffxl can produce and apply tabular diffs.
@@ -87,16 +86,10 @@ def to_csv(fin, sheet_name=0, usecols=None):
             shutil.copyfile(fin, tmpf)
         # Treat as ASCII table
         else:
+            from jc.parsers.asciitable import parse as jc_parse
             result = jc_parse(read_file(fin))
             DataFrame(result).to_csv(tmpf, index=False, header=True)
-
-
     return tmpf
-
-#%%
-from pathlib import Path
-s = Path("a.x")
-#%%
 
 def alpha2num(s):
     """ Convert base26 column string to number. """

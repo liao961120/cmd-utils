@@ -9,3 +9,11 @@ make.zip
 rtools*
 task
 Graphviz
+GoldenDict
+InkscapePortable
+ffmpeg
+maxima*
+nvim*
+ocr-models
+*.R
+*.html

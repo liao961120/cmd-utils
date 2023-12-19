@@ -4,7 +4,6 @@ export PATH=$PATH:/c/Users/rd/bin
 export PATH=$PATH:/c/Users/rd/AppData/Local/Programs/R/R-4.2.2/bin
 export PATH=$PATH:/c/Users/rd/py3.11/Scripts
 
-
 open() {
     start "$@"
 }
